@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bdqn.dao.UserMapper">
+	<resultMap type="userEx" id="userList">
+		<result property="id" column="id"/>
+		<result property="userCode" column="userCode"/>
+		<result property="userName" column="userName"/>
+		<result property="phone" column="phone"/>
+		<result property="birthday" column="birthday"/>
+		<result property="gender" column="gender"/>
+		<result property="userRole" column="userRole"/>
+		<result property="userRoleName" column="roleName"/>
+	</resultMap>
+	<!-- 查询用户表记录数 -->
+	<select id="count" resultType="int">
+		select count(1) as count from smbms_user
+	</select>
+	
+	<select id="getUserListByName" resultType="user" parameterType="string">
+		select * from smbms_user where userName like concat ('%',#{nnnn},'%')
+	</select>
+	
+	<select id="getUserList" resultType="user" parameterType="user">
+		select * from smbms_user where userName like concat ('%',#{userName},'%') and gender = #{gender}
+	</select>
+	
+	<!-- <select id="getUserListAndRole" resultMap="userList" parameterType="user">
+		SELECT u.* ,r.roleName FROM smbms_user u,smbms_role r WHERE u.userRole = r.id and u.userName like concat ('%',#{userName},'%') and u.gender = #{gender}
+	</select> -->
+	
+	<select id="getUserListAndRole" resultType="UserEx" parameterType="user">
+		SELECT u.* ,r.roleName FROM smbms_user u,smbms_role r WHERE u.userRole = r.id and u.userName like concat ('%',#{userName},'%') and u.gender = #{gender}
+	</select>
+	
+	<delete id="delUser" parameterType="int">
+		DELETE FROM smbms_user WHERE id = #{id}
+	</delete>
+	
+</mapper>
